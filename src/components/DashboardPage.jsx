@@ -23,11 +23,22 @@ export default function DashboardPage({ user }) {
     date: new Date().toISOString().split("T")[0], // YYYY-MM-DD
     time: new Date().toTimeString().slice(0, 5), // HH:MM
   });
+  const [allCategories, setAllCategories] = useState([]);
+
+  const [customCategory, setCustomCategory] = useState("");
+  const [customCategories, setCustomCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    const res = await fetch("/api/categories");
+    const data = await res.json();
+    setAllCategories(data);
+  };
 
   const [filterAccount, setFilterAccount] = useState("all");
   useEffect(() => {
     fetchAccounts();
     fetchTransactions();
+    fetchCategories(); // 🆕
   }, []);
   const fetchAccounts = async () => {
     const res = await fetch("/api/accounts");
@@ -43,7 +54,6 @@ export default function DashboardPage({ user }) {
     try {
       const res = await fetch("/api/transactions");
       const text = await res.text(); // catch invalid JSON
-      console.log("Transactions raw response:", text);
       const data = JSON.parse(text);
       const sorted = data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -68,13 +78,38 @@ export default function DashboardPage({ user }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          category: form.category === "Other" ? customCategory : form.category,
           amount: Number(form.amount),
           date: fullDateTime, // ✅ send combined date-time
         }),
       });
       const result = await res.json(); // catch errors
-      console.log("Created transaction:", result);
+
       if (res.ok) {
+        if (form.category === "Other" && customCategory.trim()) {
+          const name = customCategory.trim();
+          const alreadyExists = allCategories.some(
+            (cat) => cat.name.toLowerCase() === name.toLowerCase()
+          );
+
+          if (!alreadyExists) {
+            await fetch("/api/categories", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name,
+                type: form.type, // 🚨 important
+              }),
+            });
+          }
+          console.log("Saving custom category:", {
+            name: customCategory,
+            type: form.type,
+          });
+          // Set the actual category name (not "Other")
+          form.category = name;
+        }
+
         setForm((prev) => ({
           ...prev,
           category: "",
@@ -82,8 +117,10 @@ export default function DashboardPage({ user }) {
           note: "",
           date: new Date().toISOString().slice(0, 16),
         }));
+
         await fetchTransactions();
         await fetchAccounts();
+        await fetchCategories();
       } else {
         console.error("Transaction creation failed:", result);
       }
@@ -209,16 +246,38 @@ export default function DashboardPage({ user }) {
           </div>
           <div>
             <label className="block text-sm mb-1">Category</label>
-            <input
-              type="text"
+            <select
               name="category"
               value={form.category}
               onChange={handleChange}
               required
-              placeholder="e.g. Groceries, Salary"
               className="w-full border px-3 py-2 rounded"
-            />
+            >
+              {allCategories
+                .filter((cat) => cat.type === form.type || cat.type === "both")
+                .map((cat) => (
+                  <option key={cat._id || cat.name} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              <option value="Other">Other</option>
+            </select>
           </div>
+
+          {form.category === "Other" && (
+            <div>
+              <label className="block text-sm mb-1 mt-2">Custom Category</label>
+              <input
+                type="text"
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                placeholder="Enter category"
+                required
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          )}
+
           <div>
             <label className="block text-sm mb-1">Amount</label>
             <input
