@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Mail, Lock } from "lucide-react";
-
+import Link from "next/link";
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -73,7 +73,12 @@ export default function LoginPage() {
             />
           </div>
         </div>
-
+        <p className="text-md text-gray-600 text-center pb-3">
+          Don't have an account?{" "}
+          <Link className="text-blue-600 hover:text-blue-700" href="/register">
+            Register Here!
+          </Link>
+        </p>
         {error && (
           <div className="text-red-600 text-sm mb-4 text-center">{error}</div>
         )}

@@ -51,7 +51,7 @@ export const authOptions = {
       if (dbUser) {
         session.user.id = dbUser._id.toString(); // ✅ add this manually
       }
-      console.log(session);
+      // console.log(session);
       return session;
     },
   },

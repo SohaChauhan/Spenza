@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Mail, Lock, User } from "lucide-react";
 import bcrypt from "bcryptjs";
-
+import Link from "next/link";
 export default function RegisterPage() {
   const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -40,7 +41,9 @@ export default function RegisterPage() {
       setError(err.message);
     }
   };
-
+  const handleGoogleLogin = () => {
+    signIn("google", { callbackUrl: "/dashboard" });
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <form
@@ -95,16 +98,28 @@ export default function RegisterPage() {
             />
           </div>
         </div>
-
+        <p className="text-md text-gray-600 text-center pb-3">
+          Already have an account?{" "}
+          <Link className="text-blue-600 hover:text-blue-700" href="/login">
+            Login Here!
+          </Link>
+        </p>
         {error && (
           <div className="text-red-600 text-sm mb-4 text-center">{error}</div>
         )}
 
         <button
           type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded w-full"
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded w-full mb-4"
         >
           Register
+        </button>
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          className="border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded w-full"
+        >
+          Continue with Google
         </button>
       </form>
     </div>
