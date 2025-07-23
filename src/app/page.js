@@ -144,12 +144,14 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button
-              size="lg"
-              className="bg-linear-to-r from-teal to-teal-light hover:from-teal/90 hover:to-teal-light/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              Start Tracking Free
-            </button>
+            <Link href="/register">
+              <button
+                size="lg"
+                className="bg-linear-to-r from-teal to-teal-light hover:from-teal/90 hover:to-teal-light/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Start Tracking Free
+              </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -243,9 +245,11 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="w-fit bg-gradient-to-r from-teal to-teal-light hover:from-teal/90 hover:to-teal-light/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                Start Your Free Trial
-              </button>
+              <Link href="/register">
+                <button className="w-fit bg-gradient-to-r from-teal to-teal-light hover:from-teal/90 hover:to-teal-light/90 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Start Your Free Trial
+                </button>
+              </Link>
             </div>
 
             <div className="mt-8 text-sm text-gray-400">
