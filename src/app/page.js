@@ -82,7 +82,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <img
-              src="/Logo-Full.png"
+              src="/logofull.png"
               alt="Spenza Logo"
               className="h-10 w-auto"
             />
