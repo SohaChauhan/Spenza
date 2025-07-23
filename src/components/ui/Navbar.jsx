@@ -51,7 +51,7 @@ const Navbar = ({ user }) => {
             <Image
               width="100"
               height="100"
-              src="/logo-full.png"
+              src="/logofull.png"
               alt="Spenza Logo"
               className="h-10 w-auto"
             />
