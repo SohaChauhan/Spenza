@@ -65,6 +65,7 @@ export default function DashboardPage({ user }) {
       const res = await fetch("/api/transactions");
       const text = await res.text(); // catch invalid JSON
       const data = JSON.parse(text);
+      console.log("Fetched transactions:", data); // Debug log
       const sorted = data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -182,19 +183,19 @@ export default function DashboardPage({ user }) {
   return (
     <>
       <Navbar user={user}></Navbar>
-      <div className="py-10 px-16 mx-auto ">
+      <div className="py-10 px-10 mx-auto sm:px-16">
         {/* Header */}
         <div className="flex justify-between pb-10">
           <h2 className="text-4xl font-bold">Welcome, {user.name}!</h2>
-          <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+          {/* <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
             {timeFilters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`text-sm px-3 py-1 rounded border ${
                   filter === f.value
-                    ? "bg-blue-600 text-white"
-                    : "bg-white hover:bg-blue-50 text-gray-700"
+                    ? "bg-navy-light text-white"
+                    : "bg-gradient-to-r hover:from-teal/10 hover:to-teal-light/10 text-gray-700"
                 }`}
               >
                 {f.label}
@@ -203,32 +204,32 @@ export default function DashboardPage({ user }) {
             <button className="text-sm px-3 py-1 rounded border bg-white hover:bg-blue-50 flex items-center gap-1">
               <CalendarDays size={14} /> Select Period
             </button>
-          </div>
+          </div> */}
         </div>
         {/* Summary Cards Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {/* Balance */}
-          <div className="bg-white shadow rounded-xl py-8 px-6">
+          <div className="bg-white border border-navy-light/20 shadow rounded-xl py-8 px-6 w-full">
             <h3 className="text-sm font-medium text-gray-500 mb-2">
               Total Balance
             </h3>
-            <p className="text-3xl font-semibold text-blue-600">
+            <p className="text-3xl font-semibold text-navy">
               ₹ {totalBalance.toLocaleString("en-IN")}
             </p>
           </div>
 
           {/* Income */}
-          <div className="bg-white shadow rounded-xl py-8 px-6">
+          <div className="bg-white border border-green-200 shadow rounded-xl py-8 px-6 w-full">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Income</h3>
-            <p className="text-3xl font-semibold text-black">
+            <p className="text-3xl font-semibold text-navy">
               ₹ {totalIncome.toLocaleString("en-IN")}
             </p>
           </div>
 
           {/* Expenses */}
-          <div className="bg-white shadow rounded-xl py-8 px-6">
+          <div className="bg-white border border-red-200 shadow rounded-xl py-8 px-6 w-full">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Expenses</h3>
-            <p className="text-3xl font-semibold text-black">
+            <p className="text-3xl font-semibold text-navy">
               ₹ {totalExpense.toLocaleString("en-IN")}
             </p>
           </div>
@@ -241,12 +242,12 @@ export default function DashboardPage({ user }) {
               setShowTransactionModal(true);
               setForm((prev) => ({ ...prev, type: "income" }));
             }}
-            className="flex items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
+            className="flex flex-row md:flex-row sm:flex-col items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
           >
             <div className="p-2 bg-green-100 rounded-lg">
               <CirclePlus className="text-green-800" />
             </div>
-            <div className="text-left">
+            <div className=" md:text-left sm:text-center text-left">
               <p className="text-sm font-semibold ">Add Income</p>
               <p className="text-xs text-gray-600">Create an income manually</p>
             </div>
@@ -258,12 +259,12 @@ export default function DashboardPage({ user }) {
               setForm((prev) => ({ ...prev, type: "expense" }));
               setShowTransactionModal(true);
             }}
-            className="flex items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
+            className="flex flex-row md:flex-row sm:flex-col items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
           >
             <div className="p-2 bg-red-100 rounded-lg">
               <CircleMinus className="text-red-800" />
             </div>
-            <div className="text-left">
+            <div className="md:text-left sm:text-center text-left">
               <p className="text-sm font-semibold ">Add Expense</p>
               <p className="text-xs text-gray-600">
                 Create an expense manually
@@ -274,12 +275,12 @@ export default function DashboardPage({ user }) {
           {/* Transfer Money */}
           <button
             onClick={() => setShowTransferModal(true)}
-            className="flex items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
+            className="flex flex-row md:flex-row sm:flex-col items-center gap-2 bg-white shadow rounded-xl p-6 cursor-pointer"
           >
             <div className="p-2 bg-blue-100 rounded-lg">
               <ArrowLeftRight className="text-blue-800" />
             </div>
-            <div className="text-left">
+            <div className="md:text-left sm:text-center text-left">
               <p className="text-sm font-semibold ">Transfer Money</p>
               <p className="text-xs text-gray-600">
                 Move your money across your accounts
@@ -289,8 +290,8 @@ export default function DashboardPage({ user }) {
         </div>
         {/* Transaction Modal */}
         {showTransactionModal && (
-          <div className="fixed inset-0 bg-gray-100/90 bg-opacity-40 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+          <div className="fixed inset-0 bg-gray-100/90 bg-opacity-40 flex justify-center items-center z-50 ">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md relative md:w-1/2 mx-5">
               <button
                 onClick={() => setShowTransactionModal(false)}
                 className="absolute top-2 right-3 text-gray-400 hover:text-black"
@@ -304,8 +305,8 @@ export default function DashboardPage({ user }) {
               {/* You can copy and reuse your existing add transaction form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <h2 className="text-xl font-semibold">Add Transaction</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="md:col-span-1">
                     <label className="block text-sm mb-1">Type</label>
                     <select
                       name="type"
@@ -317,7 +318,7 @@ export default function DashboardPage({ user }) {
                       <option value={form.type}>{form.type}</option>
                     </select>
                   </div>
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="block text-sm mb-1">Category</label>
                     <select
                       name="category"
@@ -340,7 +341,7 @@ export default function DashboardPage({ user }) {
                   </div>
 
                   {form.category === "Other" && (
-                    <div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm mb-1 mt-2">
                         Custom Category
                       </label>
@@ -355,7 +356,7 @@ export default function DashboardPage({ user }) {
                     </div>
                   )}
 
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="block text-sm mb-1">Amount</label>
                     <input
                       type="number"
@@ -367,7 +368,7 @@ export default function DashboardPage({ user }) {
                       className="w-full border px-3 py-2 rounded"
                     />
                   </div>
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="block text-sm mb-1">Account</label>
                     <select
                       name="accountId"
@@ -383,7 +384,7 @@ export default function DashboardPage({ user }) {
                     </select>
                   </div>
                 </div>
-                <div>
+                <div className="md:col-span-2">
                   <label className="block text-sm mb-1">Note (optional)</label>
                   <input
                     type="text"
@@ -394,7 +395,7 @@ export default function DashboardPage({ user }) {
                     className="w-full border px-3 py-2 rounded"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 md:col-span-2">
                   <div>
                     <label className="block text-sm mb-1">Date</label>
                     <input
@@ -419,7 +420,7 @@ export default function DashboardPage({ user }) {
 
                 <button
                   type="submit"
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  className="bg-teal text-white px-4 py-2 rounded w-full hover:bg-teal-500"
                 >
                   Add Transaction
                 </button>
@@ -430,285 +431,181 @@ export default function DashboardPage({ user }) {
 
         {/* Transfer Modal */}
         {showTransferModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
+          <div className="fixed inset-0 bg-gray-100/90 bg-opacity-40 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md relative md:w-1/2 mx-5">
               <button
                 onClick={() => setShowTransferModal(false)}
-                className="absolute top-2 right-3 text-gray-400 hover:text-black"
+                className="absolute top-2 right-3 text-gray-400 hover:text-black md:hidden"
               >
                 ✕
               </button>
-              <h3 className="text-lg font-semibold mb-4">Transfer Money</h3>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
 
-              {/* Add form for:
-          - From Account
-          - To Account
-          - Amount
-          - Optional Note
-        And on submit:
-          - Create two transactions: expense in From and income in To
-          - Adjust balances accordingly
-      */}
+                  // Validate form
+                  if (
+                    !form.fromAccountId ||
+                    !form.toAccountId ||
+                    !form.transferAmount
+                  ) {
+                    alert("Please fill in all required fields");
+                    return;
+                  }
+
+                  if (form.fromAccountId === form.toAccountId) {
+                    alert("Cannot transfer to the same account");
+                    return;
+                  }
+
+                  const amount = parseFloat(form.transferAmount);
+                  if (isNaN(amount) || amount <= 0) {
+                    alert("Please enter a valid amount");
+                    return;
+                  }
+
+                  try {
+                    // Get the source account to check balance
+                    const fromAccount = accounts.find(
+                      (acc) => acc._id === form.fromAccountId
+                    );
+                    if (!fromAccount) {
+                      throw new Error("Source account not found");
+                    }
+
+                    // Check if source account has sufficient balance
+                    if (fromAccount.balance < amount) {
+                      alert("Insufficient balance in source account");
+                      return;
+                    }
+
+                    // Create a single transfer transaction
+                    const transferRes = await fetch("/api/transactions", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        type: "transfer",
+                        amount: amount,
+                        fromAccountId: form.fromAccountId,
+                        toAccountId: form.toAccountId,
+                        note:
+                          form.transferNote ||
+                          `Transfer from ${fromAccount.name} to ${
+                            accounts.find((acc) => acc._id === form.toAccountId)
+                              ?.name || "account"
+                          }`,
+                        date: new Date().toISOString(),
+                      }),
+                    });
+
+                    if (!transferRes.ok) {
+                      const error = await transferRes.json();
+                      throw new Error(
+                        error.error || "Failed to create transfer"
+                      );
+                    }
+
+                    // Refresh data
+                    await Promise.all([fetchAccounts(), fetchTransactions()]);
+
+                    // Reset form and close modal
+                    setForm((prev) => ({
+                      ...prev,
+                      fromAccountId: "",
+                      toAccountId: "",
+                      transferAmount: "",
+                      transferNote: "",
+                    }));
+                    setShowTransferModal(false);
+                  } catch (error) {
+                    console.error("Transfer failed:", error);
+                    alert(
+                      "Transfer failed: " + (error.message || "Unknown error")
+                    );
+                  }
+                }}
+                className="space-y-4"
+              >
+                <h2 className="text-xl font-semibold">Transfer Money</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="block text-sm mb-1">From Account</label>
+                    <select
+                      name="fromAccountId"
+                      value={form.fromAccountId || ""}
+                      onChange={handleChange}
+                      required
+                      className="w-full border px-3 py-2 rounded"
+                    >
+                      <option value="">Select Account</option>
+                      {accounts.map((acc) => (
+                        <option key={acc._id} value={acc._id}>
+                          {acc.name} ({acc.type})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm mb-1">To Account</label>
+                    <select
+                      name="toAccountId"
+                      value={form.toAccountId || ""}
+                      onChange={handleChange}
+                      required
+                      className="w-full border px-3 py-2 rounded"
+                    >
+                      <option value="">Select Account</option>
+                      {accounts.map((acc) => (
+                        <option key={acc._id} value={acc._id}>
+                          {acc.name} ({acc.type})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Amount</label>
+                  <input
+                    type="number"
+                    name="transferAmount"
+                    value={form.transferAmount || ""}
+                    onChange={handleChange}
+                    required
+                    min={1}
+                    placeholder="₹"
+                    className="w-full border px-3 py-2 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Note (optional)</label>
+                  <input
+                    type="text"
+                    name="transferNote"
+                    value={form.transferNote || ""}
+                    onChange={handleChange}
+                    placeholder="e.g. Transfer for rent"
+                    className="w-full border px-3 py-2 rounded"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-teal text-white px-4 py-2 rounded w-full hover:bg-teal-500"
+                >
+                  Transfer
+                </button>
+              </form>
             </div>
           </div>
         )}
 
-        <div className="flex gap-5">
-          <ExpensesByCategoryChart data={pieData} transactions={transactions} />
-          <RecentTransactions transactions={transactions} />
+        <div className="flex flex-col-reverse md:flex-row gap-5 md:gap-10 justify-center">
+          <ExpensesByCategoryChart
+            className="w-full sm:w-fit"
+            data={pieData}
+            transactions={transactions}
+          />
+          <RecentTransactions className="w-full md:w-fit" transactions={transactions} />
         </div>
-        {/* Add Account Form
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const res = await fetch("/api/accounts", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                name: newAccount.name,
-                type: newAccount.type,
-                balance: parseFloat(newAccount.balance) || 0,
-              }),
-            });
-            if (res.ok) {
-              fetchAccounts();
-              setNewAccount({ name: "", type: "", balance: "" });
-            }
-          }}
-          className="space-y-4"
-        >
-          <h2 className="text-xl font-semibold">Add New Account</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Account Name"
-              value={newAccount.name}
-              onChange={(e) =>
-                setNewAccount((prev) => ({ ...prev, name: e.target.value }))
-              }
-              required
-              className="border px-3 py-2 rounded col-span-1"
-            />
-            <select
-              value={newAccount.type}
-              onChange={(e) =>
-                setNewAccount((prev) => ({ ...prev, type: e.target.value }))
-              }
-              required
-              className="border px-3 py-2 rounded col-span-1"
-            >
-              <option value="">Type</option>
-              <option value="Bank">Bank</option>
-              <option value="Cash">Cash</option>
-              <option value="Credit">Credit</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Opening Balance"
-              value={newAccount.balance}
-              onChange={(e) =>
-                setNewAccount((prev) => ({ ...prev, balance: e.target.value }))
-              }
-              className="border px-3 py-2 rounded col-span-1"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Add Account
-          </button>
-        </form> */}
-
-        {/* Add Transaction
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-xl font-semibold">Add Transaction</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm mb-1">Type</label>
-              <select
-                name="type"
-                value={form.type}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              >
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Category</label>
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                required
-                className="w-full border px-3 py-2 rounded"
-              >
-                {allCategories
-                  .filter(
-                    (cat) => cat.type === form.type || cat.type === "both"
-                  )
-                  .map((cat) => (
-                    <option key={cat._id || cat.name} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))}
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            {form.category === "Other" && (
-              <div>
-                <label className="block text-sm mb-1 mt-2">
-                  Custom Category
-                </label>
-                <input
-                  type="text"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  placeholder="Enter category"
-                  required
-                  className="w-full border px-3 py-2 rounded"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm mb-1">Amount</label>
-              <input
-                type="number"
-                name="amount"
-                value={form.amount}
-                onChange={handleChange}
-                required
-                placeholder="₹"
-                className="w-full border px-3 py-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Account</label>
-              <select
-                name="accountId"
-                value={form.accountId}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              >
-                {accounts.map((acc) => (
-                  <option key={acc._id} value={acc._id}>
-                    {acc.name} ({acc.type})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Note (optional)</label>
-            <input
-              type="text"
-              name="note"
-              value={form.note}
-              onChange={handleChange}
-              placeholder="e.g. Paid by cash"
-              className="w-full border px-3 py-2 rounded"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm mb-1">Date</label>
-              <input
-                type="date"
-                name="date"
-                value={form.date}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Time</label>
-              <input
-                type="time"
-                name="time"
-                value={form.time}
-                onChange={handleChange}
-                className="w-full border px-3 py-2 rounded"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Add Transaction
-          </button>
-        </form> */}
-
-        {/* Filter Dropdown
-        <div>
-          <label className="block text-sm mb-1">Filter by Account</label>
-          <select
-            value={filterAccount}
-            onChange={(e) => setFilterAccount(e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="all">All Accounts</option>
-            {accounts.map((acc) => (
-              <option key={acc._id} value={acc._id}>
-                {acc.name} ({acc.type})
-              </option>
-            ))}
-          </select>
-        </div> */}
-
-        {/* Transactions List
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Transactions</h2>
-          {filteredTransactions.length === 0 ? (
-            <p className="text-gray-500">No transactions yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {filteredTransactions.map((t) => (
-                <li
-                  key={t._id}
-                  className={`border rounded p-4 flex justify-between items-center ${
-                    t.type === "income" ? "bg-green-50" : "bg-red-50"
-                  }`}
-                >
-                  <div>
-                    <p className="font-semibold">
-                      {t.category} –{" "}
-                      <span className="text-sm text-gray-600">
-                        {t.accountId.name}
-                      </span>
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {new Date(t.createdAt).toLocaleString("en-IN", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </p>
-
-                    {t.note && (
-                      <p className="text-xs text-gray-500 mt-1">{t.note}</p>
-                    )}
-                  </div>
-                  <span
-                    className={`font-medium ${
-                      t.type === "income" ? "text-green-700" : "text-red-700"
-                    }`}
-                  >
-                    {t.type === "expense" ? "-" : "+"}₹{t.amount}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div> */}
       </div>
     </>
   );

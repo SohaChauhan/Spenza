@@ -1,8 +1,79 @@
 @import "tailwindcss";
+
 @theme {
-    --color-teal: '#4FD1C7',
-    --color-navy: '#2C3E50',
-    --color-orange: '#F39C12',
-    --color-teal-light: '#6EE7B7',
-    --color-navy-light: '#34495E',
+  --color-teal: #4fd1c7;
+  --color-navy: #2c3e50;
+  --color-orange: #f39c12;
+  --color-teal-light: #6ee7b7;
+  --color-navy-light: #34495e;
+  --color-coral: #ff6b6b; /* warm red-pink pop */
+  --color-lavender: #bfaaff; /* subtle soft purple */
+  --color-amber: #ffbf00; /* brighter alternative to orange */
+  --color-mint: #a7f3d0; /* pastel fresh touch with teal */
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222.2 84% 4.9%);
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(222.2 84% 4.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222.2 84% 4.9%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222.2 84% 4.9%);
+  --color-primary: hsl(222.2 47.4% 11.2%);
+  --color-primary-foreground: hsl(210 40% 98%);
+  --color-secondary: hsl(210 40% 96.1%);
+  --color-secondary-foreground: hsl(222.2 47.4% 11.2%);
+  --color-muted: hsl(210 40% 96.1%);
+  --color-muted-foreground: hsl(215.4 16.3% 46.9%);
+  --color-accent: hsl(210 40% 96.1%);
+  --color-accent-foreground: hsl(222.2 47.4% 11.2%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  --color-border: hsl(214.3 31.8% 91.4%);
+  --color-input: hsl(214.3 31.8% 91.4%);
+  --color-ring: hsl(222.2 84% 4.9%);
+  --radius: 0.5rem;
+  --color-sidebar-background: hsl(0 0% 98%);
+  --color-sidebar-foreground: hsl(240 5.3% 26.1%);
+  --color-sidebar-primary: hsl(240 5.9% 10%);
+  --color-sidebar-primary-foreground: hsl(0 0% 98%);
+  --color-sidebar-accent: hsl(240 4.8% 95.9%);
+  --color-sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --color-sidebar-border: hsl(220 13% 91%);
+  --color-sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --animate-float: float 3s ease-in-out infinite;
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
     }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+.color-empty {
+  fill: #f0f0f0;
+}
+.color-scale-1 {
+  fill: #ffe5e5;
+}
+.color-scale-2 {
+  fill: #ff9999;
+}
+.color-scale-3 {
+  fill: #ff4d4d;
+}
+.color-scale-4 {
+  fill: #cc0000;
+}

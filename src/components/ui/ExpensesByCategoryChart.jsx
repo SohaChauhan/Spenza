@@ -1,14 +1,15 @@
 "use client";
-
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
 const COLORS = [
-  "#845EF7",
-  "#F03E3E",
-  "#339AF0",
-  "#51CF66",
-  "#5C7CFA",
-  "#FCC419",
+  "#4fd1c7",
+  "#ff6b6b",
+  "#ffbf00",
+  "#fd79a8",
+  "#636e72",
+  "#1abc9c",
+  "#2980b9",
+  "#2c2c54",
 ];
 
 export default function ExpensesByCategoryChart({ data, transactions }) {
@@ -16,9 +17,9 @@ export default function ExpensesByCategoryChart({ data, transactions }) {
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
   return (
-    <div className="bg-white p-6 rounded-xl shadow flex flex-col items-center">
-      <h3 className="text-2xl font-semibold mb-4">Expenses by Category</h3>
-      <PieChart width={250} height={250}>
+    <div className="bg-white p-6 rounded-xl shadow flex flex-col w-full md:w-fit">
+      <h3 className="text-2xl font-semibold mb-4 ">Expenses by Category</h3>
+      <PieChart width={250} height={250} className="mx-auto">
         <Pie
           data={data}
           dataKey="amount"
@@ -37,15 +38,15 @@ export default function ExpensesByCategoryChart({ data, transactions }) {
       </PieChart>
 
       {/* Custom Legend */}
-      <div className="mt-4 w-full space-y-1 text-sm">
+      <div className="mt-4 w-fit space-y-1 text-sm mx-auto">
         {data.map((entry, index) => (
           <div key={index} className="flex items-center gap-2">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: COLORS[index % COLORS.length] }}
             />
-            <span className="text-gray-700">{entry.category}</span>
-            <span className="ml-auto font-medium text-gray-900">
+            <span className="text-gray-700 mr-10">{entry.category}</span>
+            <span className="ml-auto font-medium text-gray-900 ">
               {((entry.amount / totalExpense) * 100).toFixed(2)} %
             </span>
           </div>
