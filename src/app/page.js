@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { TrendingUp, Wallet, PieChart } from "lucide-react";
 import { CheckCircle, TrendingDown, Clock, Heart } from "lucide-react";
