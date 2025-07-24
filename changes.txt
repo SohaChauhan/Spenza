@@ -1,2 +1,0 @@
-instead of blank space, it should be "no transactions found"
-income vs expense graph not working
