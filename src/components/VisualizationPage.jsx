@@ -147,8 +147,7 @@ export default function VisualizationPage({ user }) {
         return yearA === yearB ? monthA - monthB : yearA - yearB;
       });
 
-      setLineData(sortedLineData);
-
+       setLineData(sortedLineData);
       // Budget progress
       const budgetsRes = await fetch("/api/budgets");
       const budgets = await budgetsRes.json();
@@ -174,6 +173,7 @@ export default function VisualizationPage({ user }) {
 
     fetchAndSummarize();
   }, []);
+  console.log(lineData)
 
   return (
     <>
@@ -189,28 +189,34 @@ export default function VisualizationPage({ user }) {
           <div className="bg-white p-6 rounded-xl shadow-md flex items-center flex-col">
             <h2 className="text-xl font-semibold mb-4">Expenses by Category</h2>
             <div style={{ width: "350px", height: "320px" }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={data}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    label
-                  >
-                    {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+              {data && data.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      fill="#4fd1c7"
+                      label
+                    >
+                      {data.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">No valid data found</div>
+              )}
             </div>
           </div>
           {/* Line Chart */}
@@ -219,26 +225,30 @@ export default function VisualizationPage({ user }) {
               Income vs Expense Over Time
             </h2>
             <div className="w-full mx-auto pr-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={lineData}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="income"
-                    stroke="#82ca9d"
-                    strokeWidth={2}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="expense"
-                    stroke="#ff6b6b"
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {lineData && lineData.length > 0 ? (
+  <ResponsiveContainer width="100%" height={320}>
+    <LineChart data={lineData}>
+      <XAxis dataKey="month" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line
+        type="monotone"
+        dataKey="income"
+        stroke="#82ca9d"
+        strokeWidth={2}
+      />
+      <Line
+        type="monotone"
+        dataKey="expense"
+        stroke="#ff6b6b"
+        strokeWidth={2}
+      />
+    </LineChart>
+  </ResponsiveContainer>
+) : (
+  <div className="flex items-center justify-center h-80 text-gray-500">No valid data found</div>
+)}
             </div>
           </div>
         </div>
@@ -252,33 +262,38 @@ export default function VisualizationPage({ user }) {
             </h2>
             <div className="w-full overflow-x-auto">
               <div className="min-w-[700px]">
-                <CalendarHeatmap
-                  startDate={subDays(new Date(), 365)}
-                  endDate={new Date()}
-                  values={heatmapData}
-                  classForValue={(value) => {
-                    if (!value || value.count === 0) {
-                      return "color-empty";
-                    }
-                    if (value.count < 100) return "color-scale-1";
-                    if (value.count < 300) return "color-scale-2";
-                    if (value.count < 500) return "color-scale-3";
-                    return "color-scale-4";
-                  }}
-                  tooltipDataAttrs={value => {
-                    if(value.date){
-                      return {
-                        'data-tooltip-content': `${value.date+ ": ₹"+ value.count} `,
-                        'data-tooltip-id': "my-tooltip" 
-                      };
-                    }
-                    
-                  }}
-                  tooltip
-                  showWeekdayLabels
-                  gutterSize={2}
-                />
-                <ReactTooltip id="my-tooltip"/>
+                {heatmapData && heatmapData.length > 0 ? (
+  <>
+    <CalendarHeatmap
+      startDate={subDays(new Date(), 365)}
+      endDate={new Date()}
+      values={heatmapData}
+      classForValue={(value) => {
+        if (!value || value.count === 0) {
+          return "color-empty";
+        }
+        if (value.count < 100) return "color-scale-1";
+        if (value.count < 300) return "color-scale-2";
+        if (value.count < 500) return "color-scale-3";
+        return "color-scale-4";
+      }}
+      tooltipDataAttrs={value => {
+        if(value.date){
+          return {
+            'data-tooltip-content': `${value.date+ ": ₹"+ value.count} `,
+            'data-tooltip-id': "my-tooltip" 
+          };
+        }
+      }}
+      tooltip
+      showWeekdayLabels
+      gutterSize={2}
+    />
+    <ReactTooltip id="my-tooltip"/>
+  </>
+) : (
+  <div className="flex items-center justify-center h-40 text-gray-500">No valid data found</div>
+)}
               </div>
             </div>
           </div>
@@ -287,31 +302,36 @@ export default function VisualizationPage({ user }) {
           <div className="bg-white p-6 rounded-xl shadow-md w-full lg:w-140">
             <h2 className="text-xl font-semibold mb-4">Budget Progress</h2>
             <div className="space-y-4  overflow-y-auto pr-2">
-              {budgetProgress.map((item) => (
-                <div key={item.category} className="w-full">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium text-sm">{item.category}</span>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-gray-600">
-                        ₹{item.spent} / ₹{item.budget}
-                      </span>
-                      {item.over && (
-                        <span className="text-red-600 font-semibold animate-pulse">
-                          ⚠ Over Budget!
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-3 overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        item.over ? "bg-red-500" : "bg-green-500"
-                      }`}
-                      style={{ width: `${item.percent}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+  {budgetProgress && budgetProgress.length > 0 ? (
+    budgetProgress.map((item) => (
+      <div key={item.category} className="w-full">
+        <div className="flex justify-between items-center mb-1">
+          <span className="font-medium text-sm">{item.category}</span>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-gray-600">
+              ₹{item.spent} / ₹{item.budget}
+            </span>
+            {item.over && (
+              <span className="text-red-600 font-semibold animate-pulse">
+                ⚠ Over Budget!
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2 mb-3 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              item.over ? "bg-red-500" : "bg-green-500"
+            }`}
+            style={{ width: `${item.percent}%` }}
+          ></div>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="flex items-center justify-center h-24 text-gray-500">No valid data found</div>
+  )}
+
             </div>
           </div>
         </div>

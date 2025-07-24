@@ -297,7 +297,7 @@ const AccountPage = ({ user }) => {
                             <Edit size={18} />
                           </button>
                           <button
-                            className="text-navy cursor-pointer text-red-500"
+                            className="cursor-pointer text-red-500"
                             title="Delete"
                             onClick={() => setDeleteAccountId(acc._id)}
                           >
