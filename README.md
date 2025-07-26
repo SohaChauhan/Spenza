@@ -10,27 +10,9 @@ A modern, AI-powered expense tracking web application built with Next.js and Rea
 - AI-powered insights and categorization (optional)
 - Responsive, mobile-friendly design
 
-## Getting Started
+## Live Demo
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/ai-expense-tracker-app.git
-   cd ai-expense-tracker-app
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-4. **Open your browser:**
-   Visit [http://localhost:3000](http://localhost:3000)
+Access the live app here: [https://spenza.vercel.app](https://spenza.vercel.app)
 
 ## Usage
 - **Add Transactions:** Navigate to the Transactions page and click "Add Transaction".
@@ -40,21 +22,19 @@ A modern, AI-powered expense tracking web application built with Next.js and Rea
 - **Export:** Use export buttons to download your data as CSV or PDF.
 
 ## Technologies Used
-- [Next.js](https://nextjs.org/) (React framework)
-- [React](https://react.dev/)
-- [Recharts](https://recharts.org/) (charts)
-- [Tailwind CSS](https://tailwindcss.com/) (styling)
-- [jsPDF](https://github.com/parallax/jsPDF) (PDF export)
-- [MongoDB](https://www.mongodb.com/) (if using database)
+- [Next.js](https://nextjs.org/) 
+- [Tailwind CSS](https://tailwindcss.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [NextAuth](https://next-auth.js.org/)
+- [Recharts](https://recharts.org/) 
+- [jsPDF](https://github.com/parallax/jsPDF) 
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request.
+## Future Scope
 
-## License
-This project is licensed under the MIT License.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- AI-powered automatic categorization and suggestions for transactions
+- AI-powered advanced analytics and forecasting
+- AI-powered bill/receits parsing and recording transactions
+- Multi-currency and internationalization support
+- Features for recording and managaing recurring transactions/subscriptions
+- Customizable reports and dashboards
+- Notifications and reminders
