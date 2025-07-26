@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/ui/Navbar";
 import { Plus, Edit, Trash } from "lucide-react";
+import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
 
 export default function TransactionsPage({ user }) {
   const [transactions, setTransactions] = useState([]);
@@ -213,23 +214,73 @@ export default function TransactionsPage({ user }) {
   };
 
   return (
-    <>
+    <div>
       <Navbar user={user} />
       <div className="max-w-4xl mx-auto py-10 px-4">
-        <div className="flex items-center justify-between mb-6">
-          <h1
-            className="text-3xl font-bold"
-            style={{ color: "var(--color-navy)" }}
-          >
-            Transactions
-          </h1>
-          <button
-            className="p-2 rounded-full bg-teal hover:bg-teal-500 text-white shadow"
-            title="Add Transaction"
-            onClick={() => setShowModal(true)}
-          >
-            <Plus size={22} />
-          </button>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <div className="flex items-center gap-3">
+            <h1
+              className="text-3xl font-bold"
+              style={{ color: "var(--color-navy)" }}
+            >
+              Transactions
+            </h1>
+            <button
+              className="p-2 rounded-full bg-teal hover:bg-teal-500 text-white shadow"
+              title="Add Transaction"
+              onClick={() => setShowModal(true)}
+            >
+              <Plus size={22} />
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="px-3 py-1.5 bg-teal text-white rounded shadow text-sm hover:bg-teal/90"
+              onClick={() => {
+                if (transactions.length === 0) return;
+                const exportData = transactions.map((t) => ({
+                  Date: new Date(t.createdAt).toLocaleDateString(),
+                  Type: t.type,
+                  Category: t.type === "transfer" ? "-" : t.category,
+                  Account:
+                    t.type === "transfer"
+                      ? `${t.fromAccountId?.name || ""} to ${
+                          t.toAccountId?.name || ""
+                        }`
+                      : t.accountId?.name || "",
+                  Amount: t.amount,
+                  Note: t.note || "",
+                }));
+                exportToCSV(exportData, "transactions.csv");
+              }}
+              title="Export as CSV"
+            >
+              Export CSV
+            </button>
+            <button
+              className="px-3 py-1.5 bg-orange text-white rounded shadow text-sm hover:bg-orange/90"
+              onClick={() => {
+                if (transactions.length === 0) return;
+                const exportData = transactions.map((t) => ({
+                  Date: new Date(t.createdAt).toLocaleDateString(),
+                  Type: t.type,
+                  Category: t.type === "transfer" ? "-" : t.category,
+                  Account:
+                    t.type === "transfer"
+                      ? `${t.fromAccountId?.name || ""} → ${
+                          t.toAccountId?.name || ""
+                        }`
+                      : t.accountId?.name || "",
+                  Amount: t.amount,
+                  Note: t.note || "",
+                }));
+                exportToPDF(exportData, "transactions.pdf", "Transactions");
+              }}
+              title="Export as PDF"
+            >
+              Export PDF
+            </button>
+          </div>
         </div>
         {/* Add Transaction Modal */}
         {showModal && (
@@ -493,17 +544,16 @@ export default function TransactionsPage({ user }) {
                           ₹{t.amount}
                         </span>
                       </div>
-                     
                     </div>
                     <div className="flex justify-end mt-2">
-                        <button
-                          className="text-red-500 cursor-pointer"
-                          title="Delete"
-                          onClick={() => setDeleteTransactionId(t._id)}
-                        >
-                          <Trash size={18} />
-                        </button>
-                      </div>
+                      <button
+                        className="text-red-500 cursor-pointer"
+                        title="Delete"
+                        onClick={() => setDeleteTransactionId(t._id)}
+                      >
+                        <Trash size={18} />
+                      </button>
+                    </div>
                   </div>
                   {t.note && (
                     <div className="text-xs text-gray-500">Note: {t.note}</div>
@@ -662,6 +712,6 @@ export default function TransactionsPage({ user }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

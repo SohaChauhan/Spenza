@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/ui/Navbar";
 import { Edit, Trash } from "lucide-react";
+import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
 
 const AccountPage = ({ user }) => {
   const [accounts, setAccounts] = useState([]);
@@ -74,12 +75,46 @@ const AccountPage = ({ user }) => {
     <>
       <Navbar user={user} />
       <div className="max-w-3xl mx-auto py-10 px-4">
-        <h1
-          className="text-3xl font-bold mb-6"
-          style={{ color: "var(--color-navy)" }}
-        >
-          Accounts
-        </h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+          <h1
+            className="text-3xl font-bold"
+            style={{ color: "var(--color-navy)" }}
+          >
+            Accounts
+          </h1>
+          <div className="flex gap-2">
+            <button
+              className="px-3 py-1.5 bg-teal text-white rounded shadow text-sm hover:bg-teal/90"
+              onClick={() => {
+                if (accounts.length === 0) return;
+                const exportData = accounts.map(a => ({
+                  Name: a.name,
+                  Type: a.type,
+                  Balance: a.balance
+                }));
+                exportToCSV(exportData, 'accounts.csv');
+              }}
+              title="Export as CSV"
+            >
+              Export CSV
+            </button>
+            <button
+              className="px-3 py-1.5 bg-orange text-white rounded shadow text-sm hover:bg-orange/90"
+              onClick={() => {
+                if (accounts.length === 0) return;
+                const exportData = accounts.map(a => ({
+                  Name: a.name,
+                  Type: a.type,
+                  Balance: a.balance
+                }));
+                exportToPDF(exportData, 'accounts.pdf', 'Accounts');
+              }}
+              title="Export as PDF"
+            >
+              Export PDF
+            </button>
+          </div>
+        </div>
 
         {/* Add Account Form */}
         <form
