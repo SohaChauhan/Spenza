@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/ui/Navbar";
-import { Plus, Edit, Trash } from "lucide-react";
+import { Plus, EllipsisVertical, X, Trash } from "lucide-react";
 import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
+import FileUpload from "./FileUpload";
 
 export default function TransactionsPage({ user }) {
   const [transactions, setTransactions] = useState([]);
-  // Edit/Delete state for transactions
-
+  const [menuOpen, setMenuOpen] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
@@ -217,8 +217,8 @@ export default function TransactionsPage({ user }) {
     <div>
       <Navbar user={user} />
       <div className="max-w-4xl mx-auto py-10 px-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-row items-center justify-between mb-4 gap-2">
+          <div className="flex items-center gap-3 w-fit">
             <h1
               className="text-3xl font-bold"
               style={{ color: "var(--color-navy)" }}
@@ -233,7 +233,73 @@ export default function TransactionsPage({ user }) {
               <Plus size={22} />
             </button>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col items-end ">
+          <button
+            className="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 w-fit"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            
+              <EllipsisVertical className="w-6 h-6" />
+            
+          </button>
+          {menuOpen && (
+            <div className="absolute right-5 top-38 shadow-lg rounded w-fit bg-white  flex flex-col items-center md:hidden animate-fade-up z-50">
+              <div className="flex flex-col w-fit font-semibold text-gray-700 px-6 py-4  ">
+                <FileUpload></FileUpload>
+
+                <button
+                  className="hover:text-orange block py-2 md:py-0"
+                  onClick={() => {
+                    if (transactions.length === 0) return;
+                    const exportData = transactions.map((t) => ({
+                      Date: new Date(t.createdAt).toLocaleDateString(),
+                      Type: t.type,
+                      Category: t.type === "transfer" ? "-" : t.category,
+                      Account:
+                        t.type === "transfer"
+                          ? `${t.fromAccountId?.name || ""} to ${
+                              t.toAccountId?.name || ""
+                            }`
+                          : t.accountId?.name || "",
+                      Amount: t.amount,
+                      Note: t.note || "",
+                    }));
+                    exportToCSV(exportData, "transactions.csv");
+                  }}
+                  title="Export as CSV"
+                >
+                  Export CSV
+                </button>
+                <button
+                  className="hover:text-orange block py-2 md:py-0"
+                  onClick={() => {
+                    if (transactions.length === 0) return;
+                    const exportData = transactions.map((t) => ({
+                      Date: new Date(t.createdAt).toLocaleDateString(),
+                      Type: t.type,
+                      Category: t.type === "transfer" ? "-" : t.category,
+                      Account:
+                        t.type === "transfer"
+                          ? `${t.fromAccountId?.name || ""} → ${
+                              t.toAccountId?.name || ""
+                            }`
+                          : t.accountId?.name || "",
+                      Amount: t.amount,
+                      Note: t.note || "",
+                    }));
+                    exportToPDF(exportData, "transactions.pdf", "Transactions");
+                  }}
+                  title="Export as PDF"
+                >
+                  Export PDF
+                </button>
+              </div>
+            </div>
+          )}</div>
+          <div className=" gap-2 hidden md:flex">
+            <FileUpload></FileUpload>
+
             <button
               className="px-3 py-1.5 bg-teal text-white rounded shadow text-sm hover:bg-teal/90"
               onClick={() => {

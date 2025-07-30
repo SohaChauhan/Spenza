@@ -2,14 +2,20 @@
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
 const COLORS = [
-  "#4fd1c7",
-  "#ff6b6b",
-  "#ffbf00",
-  "#fd79a8",
-  "#636e72",
-  "#1abc9c",
-  "#2980b9",
-  "#2c2c54",
+  "#D00000",
+  "#F05A29",
+  "#FFBA08",
+  "#8FE388",
+  "#73B7B8",
+  "#1B998B",
+  "#50B99B",
+  "#3185FC",
+  "#CC3399",
+  "#990066",
+  "#5D2E8C",
+  "#46237A",
+  "#FF7B9C",
+  "#FF9B85",
 ];
 
 export default function ExpensesByCategoryChart({ data, transactions }) {
@@ -34,7 +40,10 @@ export default function ExpensesByCategoryChart({ data, transactions }) {
               paddingAngle={0}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip />
@@ -56,9 +65,10 @@ export default function ExpensesByCategoryChart({ data, transactions }) {
           </div>
         </>
       ) : (
-        <div className="flex items-center justify-center h-48 text-gray-500">No valid data found</div>
+        <div className="flex items-center justify-center h-48 text-gray-500">
+          No valid data found
+        </div>
       )}
     </div>
   );
 }
-
