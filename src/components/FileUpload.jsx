@@ -72,7 +72,7 @@ export default function FileUpload() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="hover:text-orange block md:hover:text-black py-2 md:py-0 md:px-3  md:bg-teal md:text-white md:rounded md:shadow md:text-sm md:hover:bg-teal/90"
+        className="hover:text-orange block md:hover:text-white py-2 md:py-0 md:px-3  md:bg-teal md:text-white md:rounded md:shadow md:text-sm md:hover:bg-teal/90"
       >
         Extract from Bank Statement
       </button>
